@@ -6,11 +6,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include "TutorialConfig.h"
+
 int main (int argc, char *argv[])
 {
   if (argc < 2)
     {
-      fprintf(stdout,"Usage: %s number\n",argv[0]);
+      fprintf(stdout,"Usage Version %d.%d: %s number\n",Tutorial_VERSION_MAJOR, Tutorial_VERSION_MINOR, argv[0]);
       return 1;
     }
   
