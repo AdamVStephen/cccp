@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Build directories, assuming a cmake convention of building in locations named build
+build/
