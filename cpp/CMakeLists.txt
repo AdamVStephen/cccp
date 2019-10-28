@@ -16,5 +16,18 @@ configure_file (
 # so that we will find TutorialConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
 
+option(USE_MYMATH "Use implementation of sqrt provided by tutorial." ON)
+
+# add the MathFunctions library?
+#
+if (USE_MYMATH)
+  include_directories ("${PROJECT_SOURCE_DIR}/MyMath")
+  add_subdirectory (MyMath) 
+  set (EXTRA_LIBS ${EXTRA_LIBS} MyMath)
+endif (USE_MYMATH)
+
 # Add the executable
 add_executable(Tutorial tutorial.cpp)
+target_link_libraries(Tutorial ${EXTRA_LIBS})
+
+
