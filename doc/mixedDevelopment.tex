@@ -1,0 +1,96 @@
+
+# TODO : how to use cite in LaTeX
+
+\section{Introduction}
+
+Document conventions
+
+\begin{enumerate}
+\item a.out : generically the output file from a compiler in example codes.
+\end{enumerate}
+
+\section{Building with CMake}
+
+\subsection{C++ Example}
+
+\cite{https://cmake.org/cmake-tutorial/}
+
+\section{Exploring a Binary}
+
+\cite{https://unix.stackexchange.com/questions/719/can-we-get-compiler-information-from-an-elf-binary}
+
+Tips from this article include :
+
+\begin{enumerate}
+\item No requirement to include compiler invocation metadata in ELF but optional.  GCC uses .comment sections.
+\item readelf, objdump and strings are all useful tools to interrogate the ELF data.
+\end{enumerate}
+
+\cite{https://jvns.ca/blog/2014/09/06/how-to-read-an-executable/}
+
+Tips from this article include :
+
+\begin{enumerate}
+\item .interp section from objdump -s lists the path of the dynamic linker
+
+\item sections are used a link time by ld
+\item segments are used at execution time (.text, .data, .rodata)
+\item .text segment contains assembly code
+\item Links to introduction to ELF \cite{http://www.bottomupcs.com/elf.html}
+\item Links to graphic showing ELF structure \cite{https://code.google.com/p/corkami/wiki/ELF101}
+\item Links to 20 part series on linkers \cite{https://lwn.net/Articles/276782/}
+\item Links to Editing Binaries (easier than you may think) \cite{https://danluu.com/edit-binary/}
+\end{enumerate}
+
+
+\subsection{Techniques}
+
+\begin{enumerate}
+\item objdump -s --section .comment a.out
+\item readelf -p .comment a.out
+\item strings -a a.out | grep gcc
+\item objdump -sj .note.ABI-tag ELFFILE
+\item objdump -sj .note.gnu-build-id ELFFILE
+\item readelf -n ELFFILE # -n notes
+\item objcopy # allows not only copy, but annotate by adding more information.
+\item readelf --symbols # equivalent of nm
+\item objdump -tT /path/to/libc.so # will tell you about symbols of a shared lib when nm cannot.
+\item readelf --sections
+\item objdump -d # Disassemble the contents of a .text segment to read the code.
+\item readelf --segments # segments determine where in memory code/data get loaded and how they are used/accessed
+\end{enumerate}
+
+\section{Examples}
+
+\begin{quote}
+$>objdump -s --section .comment ./Tutorial 
+
+./Tutorial:     file format elf64-x86-64
+
+Contents of section .comment:
+ 0000 4743433a 20285562 756e7475 20382e33  GCC: (Ubuntu 8.3
+ 0010 2e302d31 36756275 6e747533 7e31362e  .0-16ubuntu3~16.
+ 0020 30342920 382e332e 3000               04) 8.3.0.      
+\end{quote}
+
+
+4
+
+
+You can also use a clever script (analyze-x86_64.v2.sh) that counts the numbers of various CPU instructions used by the binary. It is based on parsing objdump output. Beware that it can take quite a long time to finish if you use it on a big binary.
+
+https://pastebin.com/EU23iAvL
+
+\section{To Research}
+
+\begin{enumerate}
+\item How to intercept and/or modify \_start which calls main
+\end{enumerate}
+
+\section{On Python}
+
+https://jvns.ca/blog/2014/08/12/what-happens-if-you-write-a-tcp-stack-in-python/
+
+\section{References}
+
+[1] https://unix.stackexchange.com/questions/719/can-we-get-compiler-information-from-an-elf-binary
