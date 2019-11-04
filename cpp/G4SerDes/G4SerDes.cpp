@@ -1,7 +1,8 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
-
+// To pick up std::setw
+#include <iomanip>
 /**
  * Demonstration of serialisation/deserialsation for python interactivity.
  * 
@@ -42,11 +43,15 @@ void g4sdShow() {
 bool g4sdSerialise(const char *filename, int asize) {
   std::ofstream fout;
   std::cout << "g4sdSerialise to g4arrays.dat" << std::endl;
+
+  G4int gEventNumber = 42;
+  std::string name = "neutron";
   
   fout.open(filename,
 	    std::ios::binary | std::ios::out | std::ios::trunc);
 
   for(int i=0; i<7; i++) {
+    fout << "\n" << std::setw(5) << gEventNumber << " EventId: " << name << " Type: " << i << "\n";
     fout.write(reinterpret_cast<char*>(depoEnergyTime[i]),
 	       std::streamsize(asize*sizeof(G4int)));
     fout.write(reinterpret_cast<char*>(reacEnergyTime[i]),
