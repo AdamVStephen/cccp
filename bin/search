@@ -1,0 +1,52 @@
+#
+# @(#)search.sh 
+#    A shell script to "grep" for the supplied argument from either the supplied#    directory or from "." with an option for specifying a filename mask.
+#       17/03/94  Alex Goodyear.
+
+if [ ${#} = 0 ]
+then
+    PROG=`basename ${0}`
+    echo
+    echo ${PROG}:- Usage
+    echo "    ${PROG} <match string>"
+    echo "    ${PROG} <base directory> <match string>"
+    echo "    ${PROG} <base directory> <file mask> <match string>"
+    echo "        eg ${PROG} Fred"
+    echo "           ${PROG} /usr/fred Fred"
+    echo "           ${PROG} /usr/fred \"*.h\" Fred"
+    echo
+    exit
+elif [ ${#} = 1 ]
+then
+    DIR="."
+    FILES="*"
+    MATCH=${1}
+elif [ ${#} = 2 ]
+then
+    DIR=${1}
+    FILES="*"
+    MATCH=${2}
+else
+    DIR=${1}
+    FILES=${2}
+    MATCH=${3}
+fi
+
+for i in `find ${DIR} -name ".snapshot" -prune -o -name "${FILES}" \( -type f -o -type l \) -print`
+do
+    if [ ${i} ]  # Ensure there is a name.
+    then
+        #
+        # Print the file name and line number where match is found.
+        #
+        grep -n ${MATCH} ${i} /dev/null
+
+        if [ $? = 0 ]
+        then
+            echo
+        fi
+        echo -ne ${i} "            " \\r
+    fi
+done
+
+echo
