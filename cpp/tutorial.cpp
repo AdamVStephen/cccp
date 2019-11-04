@@ -13,6 +13,18 @@
 #include "MyMath.h"
 #endif
 
+#ifdef USE_G4SERDES
+#include "G4SerDes.h"
+#endif
+
+void g4sd_test () {
+  g4sdInit();
+  g4sdShow();
+  g4sdSerialise("g4arrays.10.dat", 10);
+  g4sdSerialise("g4arrays.11.dat", 11);
+  g4sdDeserialise();
+}
+
 int main (int argc, char *argv[])
 {
   if (argc < 2)
@@ -31,6 +43,15 @@ int main (int argc, char *argv[])
   
   fprintf(stdout,"The square root of %g is %g\n",
           inputValue, outputValue);
+
+
+
+  #ifdef USE_G4SERDES
+  fprintf(stdout, "g4serdes\n");
+  g4sd_test();
+#else
+  	fprintf(stdout, "NO G4SERDES\n");
+  #endif
 
   return 0;
 }

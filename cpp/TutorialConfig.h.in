@@ -5,3 +5,6 @@
 // Import the math option
 #cmakedefine USE_MYMATH
 
+// Import the g4serdes
+#cmakedefine USE_G4SERDES
+

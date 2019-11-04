@@ -26,6 +26,17 @@ if (USE_MYMATH)
   set (EXTRA_LIBS ${EXTRA_LIBS} MyMath)
 endif (USE_MYMATH)
 
+
+option(USE_G4SERDES "Show G4 serialisation/deserialisation." ON)
+
+# add the G4serdes library
+#
+if (USE_G4SERDES)
+  include_directories ("${PROJECT_SOURCE_DIR}/G4SerDes")
+  add_subdirectory (G4SerDes) 
+  set (EXTRA_LIBS ${EXTRA_LIBS} g4serdes)
+endif (USE_G4SERDES)
+
 # Add the executable
 add_executable(Tutorial tutorial.cpp)
 target_link_libraries(Tutorial ${EXTRA_LIBS})
