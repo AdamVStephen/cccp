@@ -2,12 +2,14 @@
 #
 # How to verify cmake files on multiple platorms, other than Travis?
 #
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.1)
 
 message("cond-build : cmake demonstration of supporting multiple build platforms and submodule collections.")
 
 project(cond-build)
 add_executable(cond-build cond-build.c)
+
+# Demonstration of branching the build type based on a -DCODAS_BUILD_TYPE=foo
 
 set(SUPPORTED_BUILD_TYPES "Debug;Release;Commissioning")
 
@@ -31,6 +33,22 @@ else()
   endforeach()
   message("Rerun cmake ../ -DCODAS_BUILD_TYPE=<CODAS_BUILD_TYPE>")
   message(FATAL_ERROR "Without a valid CODAS_BUILD_TYPE, this build cannot proceed")
+endif()
+
+# Demonstration of the use of options for ccmake
+
+OPTION(COND_BUILD_HW_EXE "Build the cond-build-hw executable" OFF)
+SET(COND_BUILD_HW_EXE_branch "master" CACHE STRING "Branch for cond-build-hw")
+
+if( ${COND_BUILD_HW_EXE} )
+  message("Building the cond-build-hw executable")
+  add_executable(cond-build-hw cond-build-hw.c)
+  OPTION(COND_BUILD_HW_LIBS "Build cond-build-hw with libraries" ON)
+  OPTION(POS_NESTED_OPTION "Demonstrate nested option in positive path" ON)	
+else()
+  OPTION(COND_BUILD_HW_LIBS "Build cond-build-hw with libraries" OFF)
+  OPTION(NEG_NESTED_OPTOIN "Demonstrate nested option in the negative path" ON)
+message("NOT building the cond-build-hw executable")
 endif()
 
 message("CODAS_BUILD_TYPE is ${CODAS_BUILD_TYPE}")
